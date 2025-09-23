@@ -29,8 +29,8 @@ export const router = createBrowserRouter(
         {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
         <Route path= "/" element={<StarWarsLandingPage />} />
         <Route path="/profile-page/people/:uid" element= {<PeopleProfilePage />} />
-        <Route path="/profile-page/vehicle/:uid" element= {<VehicleProfilePage />} />
-        <Route path="/profile-page/planet/:uid" element= {<PlanetProfilePage />} />
+        <Route path="/profile-page/vehicles/:uid" element={<VehicleProfilePage />} />
+        <Route path="/profile-page/planets/:uid" element={<PlanetProfilePage />} />
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
       </Route>
