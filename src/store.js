@@ -1,149 +1,64 @@
-// export const initialStore = () => {
-//   return {
-//     allPeople: [],
-//     allPlanets: [],
-//     allVehicles: [],
-//     singlePerson: [],
-//     singlePlanet: [],
-//     singleVehicle: [],
-//     favorites: []
-//   };
-// };
-
-// export default function storeReducer(store, action = {}) {
-//   switch (action.type) {
-
-//     case 'fetchedAllPeople': {
-//       const peopleArray = action.payload;
-//       return {
-//         ...store,
-//         allPeople: [...peopleArray]
-//       };
-//     }
-
-//     case 'fetchedAllPlanets': {
-//       const planetsArray = action.payload;
-//       return {
-//         ...store,
-//         allPlanets: [...planetsArray]
-//       };
-//     }
-
-//     case 'fetchedAllVehicles': {
-//       const vehiclesArray = action.payload;
-//       return {
-//         ...store,
-//         allVehicles: [...vehiclesArray]
-//       };
-//     }
-
-//     case 'favedCharacter': {
-//       const favedChar = action.payload;
-//       console.log(`Added ${favedChar.name} with id of ${favedChar.uid}`);
-//       return {
-//         ...store,
-//         favorites: [...store.favorites, { uid: favedChar.uid, name: favedChar.name }]
-//       };
-//     }
-
-//     case 'favedPlanet': {
-//       const favedPlanet = action.payload;
-//       console.log(`Added ${favedPlanet.name} with id of ${favedPlanet.uid}`);
-//       return {
-//         ...store,
-//         favorites: [...store.favorites, { uid: favedPlanet.uid, name: favedPlanet.name }]
-//       };
-//     }
-
-//     case 'favedVehicle': {
-//       const favedVehicle = action.payload;
-//       console.log(`Added ${favedVehicle.name} with id of ${favedVehicle.uid}`);
-//       return {
-//         ...store,
-//         favorites: [...store.favorites, { uid: favedVehicle.uid, name: favedVehicle.name }]
-//       };
-//     }
-
-//     default:
-//       throw Error('Unknown action.');
-//   }
-// }
-
-export const initialStore = () => {
-  return {
-    allPeople: [],
-    allPlanets: [],
-    allVehicles: [],
-    singlePerson: [],
-    singlePlanet: [],
-    singleVehicle: [],
-    favorites: []
-  };
-};
+export const initialStore = () => ({
+  allPeople: [],
+  allPlanets: [],
+  allVehicles: [],
+  singlePerson: null,
+  singlePlanet: null,
+  singleVehicle: null,
+  favorites: []
+});
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
 
-    case 'fetchedAllPeople': {
-      const peopleArray = action.payload;
-      return {
-        ...store,
-        allPeople: [...peopleArray]
-      };
-    }
+    // --- FETCH ALL ---
+    case "fetchedAllPeople":
+      return { ...store, allPeople: [...action.payload] };
 
-    case 'fetchedAllPlanets': {
-      const planetsArray = action.payload;
-      return {
-        ...store,
-        allPlanets: [...planetsArray]
-      };
-    }
+    case "fetchedAllPlanets":
+      return { ...store, allPlanets: [...action.payload] };
 
-    case 'fetchedAllVehicles': {
-      const vehiclesArray = action.payload;
-      return {
-        ...store,
-        allVehicles: [...vehiclesArray]
-      };
-    }
+    case "fetchedAllVehicles":
+      return { ...store, allVehicles: [...action.payload] };
 
-    case 'favedCharacter': {
-      const favedChar = action.payload;
-      console.log(`Added ${favedChar.name} with id of ${favedChar.uid}`);
-      return {
-        ...store,
-        favorites: [...store.favorites, { uid: favedChar.uid, name: favedChar.name }]
-      };
-    }
+    // --- FETCH SINGLE ---
+    case "fetchedSinglePerson":
+      return { ...store, singlePerson: action.payload };
 
-    case 'favedPlanet': {
-      const favedPlanet = action.payload;
-      console.log(`Added ${favedPlanet.name} with id of ${favedPlanet.uid}`);
-      return {
-        ...store,
-        favorites: [...store.favorites, { uid: favedPlanet.uid, name: favedPlanet.name }]
-      };
-    }
+    case "fetchedSinglePlanet":
+      return { ...store, singlePlanet: action.payload };
 
-    case 'favedVehicle': {
-      const favedVehicle = action.payload;
-      console.log(`Added ${favedVehicle.name} with id of ${favedVehicle.uid}`);
-      return {
-        ...store,
-        favorites: [...store.favorites, { uid: favedVehicle.uid, name: favedVehicle.name }]
-      };
-    }
+    case "fetchedSingleVehicle":
+      return { ...store, singleVehicle: action.payload };
 
-    case 'removeFavorite': {
-      const { uid } = action.payload;
+    // --- FAVORITES ---
+    case "favedCharacter":
       return {
         ...store,
-        favorites: store.favorites.filter(fav => fav.uid !== uid)
+        favorites: [...store.favorites, { ...action.payload, category: "people" }]
       };
-    }
+
+    case "favedPlanet":
+      return {
+        ...store,
+        favorites: [...store.favorites, { ...action.payload, category: "planets" }]
+      };
+
+    case "favedVehicle":
+      return {
+        ...store,
+        favorites: [...store.favorites, { ...action.payload, category: "vehicles" }]
+      };
+
+    case "removeFavorite":
+      return {
+        ...store,
+        favorites: store.favorites.filter(
+          fav => !(fav.uid === action.payload.uid && fav.category === action.payload.category)
+        )
+      };
 
     default:
-      throw Error('Unknown action.');
+      throw Error("Unknown action.");
   }
 }
